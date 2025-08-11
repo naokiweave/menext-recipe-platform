@@ -88,6 +88,13 @@ set :bind, '0.0.0.0'
 
 # 静的ファイル配信
 set :public_folder, 'public'
+set :static, true
+
+# MIME type設定
+mime_type :mp4, 'video/mp4'
+mime_type :webm, 'video/webm'
+mime_type :m3u8, 'application/vnd.apple.mpegurl'
+mime_type :ts, 'video/mp2t'
 
 # ルート
 get '/' do

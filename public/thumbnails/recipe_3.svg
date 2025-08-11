@@ -1,0 +1,13 @@
+<svg width="320" height="180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF5722;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8A65;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="320" height="180" fill="url(#grad3)"/>
+  <text x="160" y="70" font-family="Arial, sans-serif" font-size="40" fill="white" text-anchor="middle">🎤</text>
+  <text x="160" y="110" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">音声モードで</text>
+  <text x="160" y="130" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">新規事業の壁打ち</text>
+  <text x="160" y="160" font-family="Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.8)" text-anchor="middle">25分</text>
+</svg>

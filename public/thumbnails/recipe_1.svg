@@ -1,0 +1,30 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#64B5F6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1280" height="720" fill="url(#bg1)"/>
+  
+  <!-- メインアイコン -->
+  <circle cx="640" cy="300" r="80" fill="rgba(255,255,255,0.2)"/>
+  <text x="640" y="330" text-anchor="middle" font-size="80" fill="white">📊</text>
+  
+  <!-- タイトル -->
+  <rect x="100" y="450" width="1080" height="120" fill="rgba(0,0,0,0.6)" rx="10"/>
+  <text x="640" y="490" text-anchor="middle" font-size="32" fill="white" font-weight="bold">
+    待望のGPT-5！エージェントで
+  </text>
+  <text x="640" y="530" text-anchor="middle" font-size="32" fill="white" font-weight="bold">
+    メール自動返信
+  </text>
+  
+  <!-- メタ情報 -->
+  <rect x="100" y="580" width="200" height="40" fill="rgba(255,255,255,0.9)" rx="20"/>
+  <text x="200" y="605" text-anchor="middle" font-size="18" fill="#333">📖 16分</text>
+  
+  <rect x="320" y="580" width="200" height="40" fill="rgba(255,255,255,0.9)" rx="20"/>
+  <text x="420" y="605" text-anchor="middle" font-size="18" fill="#333">⭐ 5.0</text>
+</svg>

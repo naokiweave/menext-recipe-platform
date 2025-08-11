@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ミーネクスト - 動画レシピプラットフォーム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* ヘッダー */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .logo::before {
+            content: "🌱";
+            margin-right: 0.5rem;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e5e5;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #4CAF50;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        .hero-illustration {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            position: relative;
+        }
+
+        .hero-text {
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* メインコンテンツ */
+        .main {
+            padding: 2rem 0;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 4px solid #4CAF50;
+        }
+
+        /* レシピカード */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-thumbnail {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #4CAF50, #81C784);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .recipe-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: white;
+            padding: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .recipe-content {
+            padding: 1.2rem;
+        }
+
+        .recipe-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .recipe-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .recipe-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .recipe-stats {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .rating::before {
+            content: "⭐";
+        }
+
+        /* カテゴリーセクション */
+        .category-section {
+            margin: 3rem 0;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* モーダル */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 900px;
+            max-height: 90vh;
+            width: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: flex-end;
+            z-index: 10;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .close-btn:hover {
+            background-color: #f5f5f5;
+        }
+
+        .modal-body {
+            padding: 0 2rem 2rem;
+        }
+
+        .recipe-detail-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .recipe-detail-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .recipe-detail-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+        }
+
+        .video-container {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #4CAF50, #81C784);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e5e5e5;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #4CAF50;
+            border-bottom-color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            min-height: 200px;
+            line-height: 1.8;
+        }
+
+        .tab-content h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .tab-content ul {
+            padding-left: 1.5rem;
+        }
+
+        .tab-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero-content {
+                padding: 0 15px;
+            }
+
+            .search-container {
+                margin: 0 1rem;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .modal-body {
+                padding: 0 1rem 1rem;
+            }
+
+            .recipe-detail-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">ミーネクスト</a>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="検索・保存機能で検索">
+                <button class="search-btn">🔍</button>
+            </div>
+
+            <div class="user-menu">
+                <div class="user-icon">👤</div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>コミュニティを見てみよう！</h1>
+            <div class="hero-illustration">
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🐾🐾🐾</div>
+                    <div class="hero-text">基本操作無料<br>質問<br>シェア<br>相談</div>
+                </div>
+                <div style="font-size: 8rem; margin: 0 2rem;">🦊🐻🐰🐸🐱</div>
+            </div>
+            <div class="hero-features">
+                <div class="hero-feature">
+                    <span>📚</span>
+                    <span>基本操作無料</span>
+                </div>
+                <div class="hero-feature">
+                    <span>❓</span>
+                    <span>質問</span>
+                </div>
+                <div class="hero-feature">
+                    <span>📤</span>
+                    <span>シェア</span>
+                </div>
+                <div class="hero-feature">
+                    <span>💬</span>
+                    <span>相談</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main">
+        <div class="container">
+            <h2 class="section-title">最新のAIレシピ</h2>
+
+            <div class="recipe-grid">
+                <div class="recipe-card" onclick="showRecipeDetail(1)">
+                    <div class="recipe-thumbnail"
+                        style="background-image: url('/thumbnails/225.jpg'); background-size: cover; background-position: center;">
+                        <div class="recipe-overlay">待望のGPT-5！エージェントでメール自動返信</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">待望のGPT-5！エージェントでメール自動返信</h3>
+                        <p class="recipe-description">営業チームの売上データを効率的に分析し、視覚的なグラフで表現する方法を学びます。</p>
+                        <div class="recipe-meta">
+                            <div class="recipe-stats">
+                                <div class="stat-item">📖 16</div>
+                                <div class="stat-item">🎵 16</div>
+                            </div>
+                            <div class="rating">5.0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="showRecipeDetail(2)">
+                    <div class="recipe-thumbnail"
+                        style="background-image: url('/thumbnails/recipe_2.svg'); background-size: cover; background-position: center;">
+                        <div class="recipe-overlay">もう読めないとは言わせない！手書きメモの文字起こし</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">もう読めないとは言わせない！手書きメモの文字起こし</h3>
+                        <p class="recipe-description">手書きメモの文字起こしを効率化する方法を学びます。</p>
+                        <div class="recipe-meta">
+                            <div class="recipe-stats">
+                                <div class="stat-item">📖 6</div>
+                                <div class="stat-item">🎵 6</div>
+                            </div>
+                            <div class="rating">4.8</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="showRecipeDetail(3)">
+                    <div class="recipe-thumbnail"
+                        style="background-image: url('/thumbnails/recipe_3.svg'); background-size: cover; background-position: center;">
+                        <div class="recipe-overlay">会話しながら整理！音声モードで新規事業の壁打ち</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">会話しながら整理！音声モードで新規事業の壁打ち</h3>
+                        <p class="recipe-description">音声モードを活用した新規事業のアイデア整理方法。</p>
+                        <div class="recipe-meta">
+                            <div class="recipe-stats">
+                                <div class="stat-item">📖 15</div>
+                                <div class="stat-item">🎵 15</div>
+                            </div>
+                            <div class="rating">4.9</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="showRecipeDetail(4)">
+                    <div class="recipe-thumbnail"
+                        style="background-image: url('/thumbnails/recipe_4.svg'); background-size: cover; background-position: center;">
+                        <div class="recipe-overlay">写真がピックリマン風に!? 思い出の写真でステッカー作成</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">写真がピックリマン風に!? 思い出の写真でステッカー作成</h3>
+                        <p class="recipe-description">思い出の写真をピックリマン風ステッカーに変換する方法。</p>
+                        <div class="recipe-meta">
+                            <div class="recipe-stats">
+                                <div class="stat-item">📖 54</div>
+                                <div class="stat-item">🎵 54</div>
+                            </div>
+                            <div class="rating">4.7</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card" onclick="showRecipeDetail(5)">
+                    <div class="recipe-thumbnail" style="background: linear-gradient(135deg, #607D8B, #90A4AE);">
+                        <div style="font-size: 3rem;">🔐</div>
+                        <div class="recipe-overlay">URLでのGPTパスワード生成</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">URLでのGPTパスワード生成</h3>
+                        <p class="recipe-description">セキュアなパスワード生成をGPTで自動化する方法。</p>
+                        <div class="recipe-meta">
+                            <div class="recipe-stats">
+                                <div class="stat-item">📖 28</div>
+                                <div class="stat-item">🎵 28</div>
+                            </div>
+                            <div class="rating">4.6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="section-title">初心者におすすめ</h2>
+                <div class="category-grid">
+                    <div class="category-card">
+                        <div class="category-icon">📊</div>
+                        <div class="category-name">データ分析</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">📝</div>
+                        <div class="category-name">文書作成</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🎨</div>
+                        <div class="category-name">デザイン</div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🤖</div>
+                        <div class="category-name">AI活用</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- レシピ詳細モーダル -->
+    <div id="recipeModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <!-- 詳細内容がここに動的に挿入される -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ミーネクスト - 動画レシピプラットフォーム</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">
+                <a href="https://github.com/naokiweave/menext-recipe-platform" style="color: #fff;">GitHub</a> |
+                デモ版
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // レシピデータ
+        const recipes = {
+            1: {
+                title: "待望のGPT-5！エージェントでメール自動返信",
+                description: "GPT-5の新機能を活用して、メールの自動返信システムを構築する方法を学びます。",
+                video: "/videos/225..mp4",
+                thumbnail: "/thumbnails/225.jpg",
+                duration: "16分",
+                rating: "5.0",
+                ingredients: [
+                    "ChatGPT Plus アカウント",
+                    "Gmail または Outlook",
+                    "Zapier アカウント",
+                    "基本的なプログラミング知識"
+                ],
+                instructions: [
+                    "GPT-5 エージェント機能の設定",
+                    "メールフィルタリングルールの作成",
+                    "自動返信テンプレートの設計",
+                    "Zapier との連携設定",
+                    "テスト実行と調整"
+                ],
+                tips: [
+                    "返信内容は簡潔で丁寧に",
+                    "重要なメールは手動確認を推奨",
+                    "定期的にログを確認して精度向上"
+                ]
+            },
+            2: {
+                title: "もう読めないとは言わせない！手書きメモの文字起こし",
+                description: "手書きのメモや文書をデジタル化し、検索可能なテキストに変換する方法。",
+                video: "/videos/recipe_2.mp4",
+                thumbnail: "/thumbnails/recipe_2.svg",
+                duration: "12分",
+                rating: "4.8"
+            },
+            3: {
+                title: "会話しながら整理！音声モードで新規事業の壁打ち",
+                description: "ChatGPTの音声機能を使って、新規事業のアイデアを整理・発展させる手法。",
+                video: "/videos/recipe_3.mp4",
+                thumbnail: "/thumbnails/recipe_3.svg",
+                duration: "25分",
+                rating: "4.9"
+            }
+        };
+
+        function showRecipeDetail(id) {
+            const recipe = recipes[id];
+            if (!recipe) return;
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="recipe-detail-header">
+                    <h1 class="recipe-detail-title">${recipe.title}</h1>
+                    <div class="recipe-detail-meta">
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <span>${recipe.duration}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⭐</span>
+                            <span>${recipe.rating}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>📖</span>
+                            <span>作業時間: ${recipe.duration}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="video-container">
+                    <video controls style="width: 100%; height: 100%; object-fit: cover;">
+                        <source src="${recipe.video}" type="video/mp4">
+                        お使いのブラウザは動画再生に対応していません。
+                    </video>
+                    <div class="video-overlay">
+                        <h3>${recipe.title}</h3>
+                        <p>${recipe.description}</p>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('ingredients', this)">📋 必要なもの</button>
+                    <button class="tab" onclick="showTab('instructions', this)">📝 手順</button>
+                    <button class="tab" onclick="showTab('tips', this)">💡 コツ・ポイント</button>
+                </div>
+                
+                <div id="ingredients" class="tab-content">
+                    <h3>必要なもの</h3>
+                    <ul>
+                        ${recipe.ingredients ? recipe.ingredients.map(item => `<li>${item}</li>`).join('') : '<li>準備中...</li>'}
+                    </ul>
+                </div>
+                
+                <div id="instructions" class="tab-content" style="display: none;">
+                    <h3>作業手順</h3>
+                    <ol>
+                        ${recipe.instructions ? recipe.instructions.map(step => `<li>${step}</li>`).join('') : '<li>準備中...</li>'}
+                    </ol>
+                </div>
+                
+                <div id="tips" class="tab-content" style="display: none;">
+                    <h3>コツ・ポイント</h3>
+                    <ul>
+                        ${recipe.tips ? recipe.tips.map(tip => `<li>${tip}</li>`).join('') : '<li>準備中...</li>'}
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('recipeModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('recipeModal').style.display = 'none';
+        }
+
+        function showTab(tabName, button) {
+            // すべてのタブコンテンツを非表示
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.style.display = 'none');
+
+            // すべてのタブボタンからactiveクラスを削除
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // 選択されたタブコンテンツを表示
+            document.getElementById(tabName).style.display = 'block';
+
+            // 選択されたタブボタンにactiveクラスを追加
+            button.classList.add('active');
+        }
+
+        // モーダル外クリックで閉じる
+        document.getElementById('recipeModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>
