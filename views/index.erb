@@ -1,0 +1,38 @@
+<div class="card">
+    <h2>📚 動画レシピ一覧</h2>
+    <p>業務効率化のための実践的な動画レシピをご覧いただけます。</p>
+</div>
+
+<div class="grid">
+    <% recipes.each do |recipe| %>
+        <div class="card">
+            <h3><%= recipe['title'] %></h3>
+            <p><%= recipe['description'] %></p>
+            
+            <div style="margin: 1rem 0;">
+                <span class="badge badge-primary"><%= recipe['industry'] %></span>
+                <span class="badge badge-success"><%= recipe['purpose'] %></span>
+                <span class="badge badge-<%= recipe['difficulty_level'] == '初級' ? 'success' : recipe['difficulty_level'] == '中級' ? 'warning' : 'danger' %>">
+                    <%= recipe['difficulty_level'] %>
+                </span>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <small>⏱️ <%= recipe['duration_minutes'] %>分</small>
+                <small style="margin-left: 1rem;">
+                    🔓 <%= recipe['access_level'] == 'free' ? '無料' : 'プレミアム' %>
+                </small>
+            </div>
+            
+            <a href="/recipes/<%= recipe['id'] %>" class="btn">詳細を見る</a>
+        </div>
+    <% end %>
+</div>
+
+<% if recipes.empty? %>
+    <div class="card">
+        <h3>📝 レシピがありません</h3>
+        <p>まだレシピが登録されていません。管理画面からレシピを追加してください。</p>
+        <a href="/admin" class="btn">管理画面へ</a>
+    </div>
+<% end %>

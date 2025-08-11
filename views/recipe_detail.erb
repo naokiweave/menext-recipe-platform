@@ -1,0 +1,84 @@
+<div class="card">
+    <h1><%= recipe['title'] %></h1>
+    
+    <div style="margin: 1rem 0;">
+        <span class="badge badge-primary"><%= recipe['industry'] %></span>
+        <span class="badge badge-success"><%= recipe['purpose'] %></span>
+        <span class="badge badge-<%= recipe['difficulty_level'] == '初級' ? 'success' : recipe['difficulty_level'] == '中級' ? 'warning' : 'danger' %>">
+            <%= recipe['difficulty_level'] %>
+        </span>
+        <span class="badge badge-<%= recipe['access_level'] == 'free' ? 'success' : 'warning' %>">
+            <%= recipe['access_level'] == 'free' ? '無料' : 'プレミアム' %>
+        </span>
+    </div>
+    
+    <p><%= recipe['description'] %></p>
+</div>
+
+<div class="card">
+    <h3>🎥 動画</h3>
+    <div class="video-container">
+        <% if recipe['video_url'] %>
+            <video class="video-player" controls poster="">
+                <source src="<%= recipe['video_url'] %>" type="video/mp4">
+                <p>お使いのブラウザは動画再生に対応していません。</p>
+            </video>
+        <% else %>
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white;">
+                <p>動画がアップロードされていません</p>
+            </div>
+        <% end %>
+    </div>
+    
+    <div style="margin-top: 1rem;">
+        <small>⏱️ 所要時間: <%= recipe['duration_minutes'] %>分</small>
+        <% if recipe['access_level'] == 'premium' && recipe['preview_seconds'] %>
+            <small style="margin-left: 1rem;">👁️ プレビュー: <%= recipe['preview_seconds'] %>秒</small>
+        <% end %>
+    </div>
+</div>
+
+<div class="card">
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('ingredients')">📋 材料・素材</button>
+        <button class="tab" onclick="showTab('instructions')">📝 手順</button>
+        <button class="tab" onclick="showTab('tips')">💡 コツ・ポイント</button>
+    </div>
+    
+    <div id="ingredients" class="tab-content">
+        <h4>必要な材料・素材</h4>
+        <%= recipe['ingredients'] || '<p>材料情報がありません。</p>' %>
+    </div>
+    
+    <div id="instructions" class="tab-content" style="display: none;">
+        <h4>作業手順</h4>
+        <%= recipe['instructions'] || '<p>手順情報がありません。</p>' %>
+    </div>
+    
+    <div id="tips" class="tab-content" style="display: none;">
+        <h4>コツ・ポイント</h4>
+        <%= recipe['tips'] || '<p>コツ・ポイント情報がありません。</p>' %>
+    </div>
+</div>
+
+<div class="card">
+    <a href="/" class="btn btn-secondary">← 一覧に戻る</a>
+</div>
+
+<script>
+function showTab(tabName) {
+    // すべてのタブコンテンツを非表示
+    const contents = document.querySelectorAll('.tab-content');
+    contents.forEach(content => content.style.display = 'none');
+    
+    // すべてのタブボタンからactiveクラスを削除
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // 選択されたタブコンテンツを表示
+    document.getElementById(tabName).style.display = 'block';
+    
+    // 選択されたタブボタンにactiveクラスを追加
+    event.target.classList.add('active');
+}
+</script>

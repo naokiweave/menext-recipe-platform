@@ -1,0 +1,97 @@
+<div class="card">
+    <h2>⚙️ 管理画面</h2>
+    <p>レシピの管理と動画のアップロードができます。</p>
+</div>
+
+<div class="card">
+    <h3>📊 統計情報</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div style="text-align: center; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
+            <h4><%= recipes.length %></h4>
+            <p>総レシピ数</p>
+        </div>
+        <div style="text-align: center; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
+            <h4><%= recipes.count { |r| r['access_level'] == 'free' } %></h4>
+            <p>無料レシピ</p>
+        </div>
+        <div style="text-align: center; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
+            <h4><%= recipes.count { |r| r['access_level'] == 'premium' } %></h4>
+            <p>プレミアムレシピ</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>📝 レシピ一覧</h3>
+    
+    <% if recipes.any? %>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #dee2e6;">ID</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #dee2e6;">タイトル</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #dee2e6;">業種</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #dee2e6;">難易度</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #dee2e6;">アクセス</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #dee2e6;">動画</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #dee2e6;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% recipes.each do |recipe| %>
+                        <tr>
+                            <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><%= recipe['id'] %></td>
+                            <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                <strong><%= recipe['title'] %></strong>
+                            </td>
+                            <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><%= recipe['industry'] %></td>
+                            <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                <span class="badge badge-<%= recipe['difficulty_level'] == '初級' ? 'success' : recipe['difficulty_level'] == '中級' ? 'warning' : 'danger' %>">
+                                    <%= recipe['difficulty_level'] %>
+                                </span>
+                            </td>
+                            <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                <span class="badge badge-<%= recipe['access_level'] == 'free' ? 'success' : 'warning' %>">
+                                    <%= recipe['access_level'] == 'free' ? '無料' : 'プレミアム' %>
+                                </span>
+                            </td>
+                            <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                <%= recipe['video_url'] ? '✅ あり' : '❌ なし' %>
+                            </td>
+                            <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                <a href="/recipes/<%= recipe['id'] %>" class="btn" style="font-size: 0.8rem; padding: 0.5rem 1rem;">詳細</a>
+                            </td>
+                        </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    <% else %>
+        <p>レシピがありません。</p>
+    <% end %>
+</div>
+
+<div class="card">
+    <h3>📤 動画アップロード機能</h3>
+    <p>現在、動画アップロード機能は開発中です。</p>
+    <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 1rem; margin-top: 1rem;">
+        <h4>🚧 実装予定の機能</h4>
+        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+            <li>動画ファイルのアップロード</li>
+            <li>FFmpegによるHLS変換</li>
+            <li>複数画質の自動生成</li>
+            <li>S3 + CloudFront配信</li>
+            <li>プレビュー制限機能</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <h3>🔗 API エンドポイント</h3>
+    <div style="background-color: #f8f9fa; border-radius: 4px; padding: 1rem;">
+        <p><strong>レシピ一覧:</strong> <code>GET /api/recipes</code></p>
+        <p><strong>レシピ詳細:</strong> <code>GET /api/recipes/:id</code></p>
+    </div>
+    <a href="/api/recipes" class="btn" style="margin-top: 1rem;">API テスト</a>
+</div>

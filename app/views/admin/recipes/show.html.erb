@@ -1,0 +1,322 @@
+<div class="admin-header">
+  <h1><%= @recipe.title %></h1>
+  <div class="header-actions">
+    <%= link_to '編集', edit_admin_recipe_path(@recipe), class: 'btn btn-warning' %>
+    <%= link_to '一覧に戻る', admin_recipes_path, class: 'btn btn-secondary' %>
+  </div>
+</div>
+
+<div class="recipe-details">
+  <div class="detail-section">
+    <h3>基本情報</h3>
+    <div class="detail-grid">
+      <div class="detail-item">
+        <label>業種:</label>
+        <span><%= @recipe.industry %></span>
+      </div>
+      <div class="detail-item">
+        <label>用途:</label>
+        <span><%= @recipe.purpose %></span>
+      </div>
+      <div class="detail-item">
+        <label>難易度:</label>
+        <span class="badge difficulty-<%= @recipe.difficulty_level %>">
+          <%= @recipe.difficulty_level %>
+        </span>
+      </div>
+      <div class="detail-item">
+        <label>所要時間:</label>
+        <span><%= @recipe.formatted_duration %></span>
+      </div>
+      <div class="detail-item">
+        <label>アクセス:</label>
+        <span class="badge access-<%= @recipe.access_level %>">
+          <%= @recipe.access_level == 'free' ? '無料' : 'プレミアム' %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-section">
+    <h3>説明</h3>
+    <p><%= @recipe.description %></p>
+  </div>
+
+  <!-- 動画アップロード・管理セクション -->
+  <div class="detail-section video-section">
+    <h3>動画管理</h3>
+    
+    <div class="video-status">
+      <div class="status-item">
+        <label>処理状態:</label>
+        <span class="badge processing-<%= @recipe.processing_status %>">
+          <%= @recipe.processing_status %>
+        </span>
+      </div>
+      
+      <% if @recipe.processing_status == 'failed' && @recipe.processing_error.present? %>
+        <div class="error-message">
+          <strong>エラー:</strong> <%= @recipe.processing_error %>
+        </div>
+      <% end %>
+      
+      <% if @recipe.processed_at.present? %>
+        <div class="status-item">
+          <label>処理完了日時:</label>
+          <span><%= @recipe.processed_at.strftime('%Y/%m/%d %H:%M') %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 動画アップロードフォーム -->
+    <div class="upload-section">
+      <h4>動画アップロード</h4>
+      <%= form_with url: upload_video_admin_recipe_path(@recipe), method: :post, 
+                    multipart: true, local: true, class: 'upload-form' do |f| %>
+        <div class="upload-field">
+          <%= f.file_field :video_file, accept: 'video/*', class: 'file-input' %>
+          <small class="help-text">
+            対応形式: MP4, MOV, AVI など（最大2GB）
+          </small>
+        </div>
+        
+        <div class="upload-actions">
+          <%= f.submit 'アップロード開始', class: 'btn btn-primary', 
+                       confirm: '動画処理を開始しますか？数分かかる場合があります。' %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 現在の動画情報 -->
+    <% if @recipe.has_hls_video? %>
+      <div class="current-video">
+        <h4>現在の動画</h4>
+        <div class="video-info">
+          <div class="info-item">
+            <label>HLS URL:</label>
+            <code><%= @recipe.hls_master_url %></code>
+          </div>
+          
+          <% if @recipe.available_qualities.any? %>
+            <div class="info-item">
+              <label>利用可能画質:</label>
+              <span><%= @recipe.available_qualities.join(', ') %></span>
+            </div>
+          <% end %>
+          
+          <% if @recipe.thumbnail_s3_key.present? %>
+            <div class="info-item">
+              <label>サムネイル:</label>
+              <img src="<%= @recipe.thumbnail_streaming_url %>" 
+                   alt="サムネイル" class="thumbnail-preview">
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% elsif @recipe.video_url.present? %>
+      <div class="current-video">
+        <h4>従来形式の動画</h4>
+        <div class="video-info">
+          <div class="info-item">
+            <label>動画URL:</label>
+            <code><%= @recipe.video_url %></code>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- プレビュー -->
+  <% if @recipe.processing_completed? %>
+    <div class="detail-section">
+      <h3>プレビュー</h3>
+      <div class="preview-container">
+        <iframe src="/recipes/<%= @recipe.id %>" 
+                width="100%" height="600" frameborder="0">
+        </iframe>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.recipe-details {
+  max-width: 1000px;
+}
+
+.detail-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.detail-section h3 {
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+.detail-section h4 {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detail-item label {
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+}
+
+.video-status {
+  margin-bottom: 20px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.upload-section {
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.file-input {
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 300px;
+}
+
+.help-text {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.current-video {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.video-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-item label {
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+}
+
+.info-item code {
+  background-color: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.thumbnail-preview {
+  max-width: 200px;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+.preview-container {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.difficulty-初級 { background-color: #d4edda; color: #155724; }
+.difficulty-中級 { background-color: #fff3cd; color: #856404; }
+.difficulty-上級 { background-color: #f8d7da; color: #721c24; }
+
+.processing-pending { background-color: #e2e3e5; color: #383d41; }
+.processing-processing { background-color: #cce5ff; color: #004085; }
+.processing-completed { background-color: #d4edda; color: #155724; }
+.processing-failed { background-color: #f8d7da; color: #721c24; }
+
+.access-free { background-color: #d4edda; color: #155724; }
+.access-premium { background-color: #fff3cd; color: #856404; }
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-primary { background-color: #007bff; color: white; }
+.btn-warning { background-color: #ffc107; color: #212529; }
+.btn-secondary { background-color: #6c757d; color: white; }
+</style>

@@ -1,0 +1,134 @@
+<div class="admin-header">
+  <h1>レシピ管理</h1>
+  <%= link_to '新規レシピ作成', new_admin_recipe_path, class: 'btn btn-primary' %>
+</div>
+
+<div class="recipes-table">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>タイトル</th>
+        <th>業種</th>
+        <th>難易度</th>
+        <th>動画処理状態</th>
+        <th>アクセス</th>
+        <th>作成日</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @recipes.each do |recipe| %>
+        <tr>
+          <td><%= recipe.id %></td>
+          <td>
+            <%= link_to recipe.title, admin_recipe_path(recipe), class: 'recipe-title-link' %>
+          </td>
+          <td><%= recipe.industry %></td>
+          <td>
+            <span class="badge difficulty-<%= recipe.difficulty_level %>">
+              <%= recipe.difficulty_level %>
+            </span>
+          </td>
+          <td>
+            <span class="badge processing-<%= recipe.processing_status %>">
+              <%= recipe.processing_status %>
+            </span>
+          </td>
+          <td>
+            <span class="badge access-<%= recipe.access_level %>">
+              <%= recipe.access_level == 'free' ? '無料' : 'プレミアム' %>
+            </span>
+          </td>
+          <td><%= recipe.created_at.strftime('%Y/%m/%d') %></td>
+          <td>
+            <%= link_to '詳細', admin_recipe_path(recipe), class: 'btn btn-sm btn-info' %>
+            <%= link_to '編集', edit_admin_recipe_path(recipe), class: 'btn btn-sm btn-warning' %>
+            <%= link_to '削除', admin_recipe_path(recipe), method: :delete, 
+                        confirm: '本当に削除しますか？', class: 'btn btn-sm btn-danger' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<style>
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.recipes-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.table {
+  width: 100%;
+  margin: 0;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  padding: 12px;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.recipe-title-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.recipe-title-link:hover {
+  text-decoration: underline;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.difficulty-初級 { background-color: #d4edda; color: #155724; }
+.difficulty-中級 { background-color: #fff3cd; color: #856404; }
+.difficulty-上級 { background-color: #f8d7da; color: #721c24; }
+
+.processing-pending { background-color: #e2e3e5; color: #383d41; }
+.processing-processing { background-color: #cce5ff; color: #004085; }
+.processing-completed { background-color: #d4edda; color: #155724; }
+.processing-failed { background-color: #f8d7da; color: #721c24; }
+
+.access-free { background-color: #d4edda; color: #155724; }
+.access-premium { background-color: #fff3cd; color: #856404; }
+
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 12px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-primary { background-color: #007bff; color: white; }
+.btn-info { background-color: #17a2b8; color: white; }
+.btn-warning { background-color: #ffc107; color: #212529; }
+.btn-danger { background-color: #dc3545; color: white; }
+.btn-sm { padding: 4px 8px; font-size: 11px; }
+</style>
