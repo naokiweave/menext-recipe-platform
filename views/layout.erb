@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ミーネクスト - 動画レシピプラットフォーム</title>
+            <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ミーネクスト - 動画レシピプラットフォーム</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,162 +13,566 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #f8f9fa;
+            background-color: #F4F4F4;
         }
         
+        /* ヘッダー */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 0.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .logo::before {
+            content: "🌱";
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .header-center {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-bar:focus {
+            border-color: #4CAF50;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* メインコンテンツ */
+        .main {
+            padding: 2rem 0;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-        }
-        
-        .header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-        
-        .nav {
-            margin-top: 1rem;
-        }
-        
-        .nav a {
-            color: white;
-            text-decoration: none;
-            margin-right: 2rem;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        
-        .nav a:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
-        
-        .main {
-            padding: 2rem 0;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        
-        .btn-secondary {
-            background-color: #6c757d;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #545b62;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-            border-radius: 12px;
-            margin-right: 0.5rem;
-        }
-        
-        .badge-primary { background-color: #e3f2fd; color: #1976d2; }
-        .badge-success { background-color: #e8f5e8; color: #2e7d32; }
-        .badge-warning { background-color: #fff3e0; color: #f57c00; }
-        .badge-danger { background-color: #ffebee; color: #d32f2f; }
-        
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            background-color: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-        
-        .video-player {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid #e0e0e0;
-            margin-bottom: 1rem;
-        }
-        
-        .tab {
-            padding: 1rem 1.5rem;
             background: none;
-            border: none;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
         }
         
-        .tab.active {
-            border-bottom-color: #007bff;
-            color: #007bff;
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* 横スクロールカードレイアウト */
+        .recipe-scroll-container {
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .recipe-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .recipe-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .recipe-scroll-container::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        .recipe-scroll-grid {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0.5rem 0;
+            min-width: max-content;
+        }
+        
+        .recipe-card {
+            width: 280px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .recipe-thumbnail {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #4CAF50, #81C784);
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .recipe-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .recipe-content {
+            padding: 1.2rem;
+        }
+        
+        .recipe-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .recipe-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .recipe-stats {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .bookmark-count {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #4CAF50;
             font-weight: 600;
         }
         
-        .tab-content {
-            min-height: 200px;
+        /* 初心者におすすめセクション */
+        .beginner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
         
-        .footer {
-            background-color: #343a40;
+        .beginner-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .beginner-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .beginner-thumbnail {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .beginner-tag {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
             color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .beginner-content {
+            padding: 1rem;
+        }
+        
+        .beginner-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .beginner-description {
+            color: #666;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-bottom: 0.8rem;
+        }
+        
+        .beginner-stats {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
             text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
+            margin-bottom: 3rem;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        /* セクションコンテナ */
+        .section-container {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-left: 0.5rem;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        /* レシピグリッド */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .recipe-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .recipe-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .recipe-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .recipe-card:hover .recipe-thumbnail img {
+            transform: scale(1.05);
+        }
+        
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .recipe-card:hover .play-overlay {
+            opacity: 1;
+        }
+        
+        .play-icon {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .duration-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .recipe-info {
+            padding: 1.2rem;
+        }
+        
+        .recipe-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-badge, .industry-badge {
+            background: #f0f0f0;
+            color: #666;
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        /* カテゴリーグリッド */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .category-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* 人気レシピ */
+        .popular-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .popular-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .popular-card.featured {
+            grid-column: span 2;
+        }
+        
+        .popular-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .popular-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .popular-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .popular-card:hover .popular-thumbnail img {
+            transform: scale(1.05);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .popular-info {
+            padding: 1.2rem;
+        }
+        
+        .popular-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        .popular-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .views, .likes {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .container { padding: 0 15px; }
+            .hero-title { font-size: 2rem; }
+            .recipe-grid { grid-template-columns: 1fr; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+            .popular-grid { grid-template-columns: 1fr; }
+            .popular-card.featured { grid-column: span 1; }
+            .section-title { font-size: 1.5rem; }
+            .header-content { padding: 0 15px; }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <div class="container">
-            <h1>🎥 ミーネクスト</h1>
-            <nav class="nav">
-                <a href="/">ホーム</a>
-                <a href="/admin">管理画面</a>
-                <a href="/api/recipes">API</a>
-            </nav>
+        <div class="header-content">
+            <a href="/" class="logo">ミーネクスト</a>
+            
+            <div class="header-center">
+                <input type="text" class="search-bar" placeholder="業種・使用場面で検索">
+            </div>
+            
+            <div class="header-right">
+                <div class="user-icon">👤</div>
+            </div>
         </div>
     </header>
     
@@ -176,11 +581,5 @@
             <%= yield %>
         </div>
     </main>
-    
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 ミーネクスト - 動画レシピプラットフォーム</p>
-        </div>
-    </footer>
 </body>
 </html>

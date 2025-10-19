@@ -1,0 +1,484 @@
+<!-- レシピ作成・編集フォーム -->
+<div class="form-container">
+    <h1 class="form-title"><%= @recipe ? 'レシピを編集' : '新しいレシピを作成' %></h1>
+    
+    <form action="<%= @recipe ? "/recipes/#{@recipe['id']}" : '/recipes' %>" method="POST" enctype="multipart/form-data" class="recipe-form">
+        <% if @recipe %>
+            <input type="hidden" name="_method" value="PUT">
+        <% end %>
+        
+        <!-- 基本情報 -->
+        <div class="form-section">
+            <h2 class="section-title">基本情報</h2>
+            
+            <div class="form-group">
+                <label for="title">タイトル *</label>
+                <input type="text" id="title" name="title" value="<%= @recipe ? @recipe['title'] : '' %>" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">説明</label>
+                <textarea id="description" name="description" rows="3"><%= @recipe ? @recipe['description'] : '' %></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="industry">業界 *</label>
+                    <select id="industry" name="industry" required>
+                        <option value="">選択してください</option>
+                        <option value="IT・システム" <%= @recipe && @recipe['industry'] == 'IT・システム' ? 'selected' : '' %>>IT・システム</option>
+                        <option value="総務・人事" <%= @recipe && @recipe['industry'] == '総務・人事' ? 'selected' : '' %>>総務・人事</option>
+                        <option value="企画・マーケティング" <%= @recipe && @recipe['industry'] == '企画・マーケティング' ? 'selected' : '' %>>企画・マーケティング</option>
+                        <option value="デザイン・クリエイティブ" <%= @recipe && @recipe['industry'] == 'デザイン・クリエイティブ' ? 'selected' : '' %>>デザイン・クリエイティブ</option>
+                        <option value="製造・現場" <%= @recipe && @recipe['industry'] == '製造・現場' ? 'selected' : '' %>>製造・現場</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="purpose">目的 *</label>
+                    <select id="purpose" name="purpose" required>
+                        <option value="">選択してください</option>
+                        <option value="AI活用" <%= @recipe && @recipe['purpose'] == 'AI活用' ? 'selected' : '' %>>AI活用</option>
+                        <option value="文書作成" <%= @recipe && @recipe['purpose'] == '文書作成' ? 'selected' : '' %>>文書作成</option>
+                        <option value="アイデア発想" <%= @recipe && @recipe['purpose'] == 'アイデア発想' ? 'selected' : '' %>>アイデア発想</option>
+                        <option value="画像加工" <%= @recipe && @recipe['purpose'] == '画像加工' ? 'selected' : '' %>>画像加工</option>
+                        <option value="メモ取り" <%= @recipe && @recipe['purpose'] == 'メモ取り' ? 'selected' : '' %>>メモ取り</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="difficulty_level">難易度 *</label>
+                    <select id="difficulty_level" name="difficulty_level" required>
+                        <option value="">選択してください</option>
+                        <option value="初級" <%= @recipe && @recipe['difficulty_level'] == '初級' ? 'selected' : '' %>>初級</option>
+                        <option value="中級" <%= @recipe && @recipe['difficulty_level'] == '中級' ? 'selected' : '' %>>中級</option>
+                        <option value="上級" <%= @recipe && @recipe['difficulty_level'] == '上級' ? 'selected' : '' %>>上級</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration_minutes">作業時間（分） *</label>
+                    <input type="number" id="duration_minutes" name="duration_minutes" value="<%= @recipe ? @recipe['duration_minutes'] : '' %>" min="1" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="access_level">アクセスレベル</label>
+                    <select id="access_level" name="access_level">
+                        <option value="free" <%= @recipe && @recipe['access_level'] == 'free' ? 'selected' : '' %>>無料</option>
+                        <option value="premium" <%= @recipe && @recipe['access_level'] == 'premium' ? 'selected' : '' %>>プレミアム</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="preview_seconds">プレビュー時間（秒）</label>
+                    <input type="number" id="preview_seconds" name="preview_seconds" value="<%= @recipe ? @recipe['preview_seconds'] : '' %>" min="0">
+                </div>
+            </div>
+        </div>
+        
+        <!-- メディアファイル -->
+        <div class="form-section">
+            <h2 class="section-title">メディアファイル</h2>
+            
+            <div class="form-group">
+                <label for="video_file">動画ファイル</label>
+                <input type="file" id="video_file" name="video_file" accept="video/*">
+                <% if @recipe && @recipe['video_url'] %>
+                    <div class="current-file">現在のファイル: <%= @recipe['video_url'] %></div>
+                <% end %>
+            </div>
+            
+            <div class="form-group">
+                <label for="thumbnail_file">サムネイル画像</label>
+                <input type="file" id="thumbnail_file" name="thumbnail_file" accept="image/*">
+                <% if @recipe && @recipe['thumbnail_url'] %>
+                    <div class="current-file">
+                        現在の画像: 
+                        <img src="<%= @recipe['thumbnail_url'] %>" alt="サムネイル" class="thumbnail-preview">
+                    </div>
+                <% end %>
+            </div>
+        </div>
+        
+        <!-- 詳細情報 -->
+        <div class="form-section">
+            <h2 class="section-title">詳細情報</h2>
+            
+            <div class="form-group">
+                <label for="ingredients">必要なもの</label>
+                <textarea id="ingredients" name="ingredients" rows="4" placeholder="HTMLタグを使用できます（例：&lt;ul&gt;&lt;li&gt;項目1&lt;/li&gt;&lt;/ul&gt;）"><%= @recipe ? @recipe['ingredients'] : '' %></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="instructions">手順</label>
+                <textarea id="instructions" name="instructions" rows="6" placeholder="HTMLタグを使用できます（例：&lt;ol&gt;&lt;li&gt;手順1&lt;/li&gt;&lt;/ol&gt;）"><%= @recipe ? @recipe['instructions'] : '' %></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="tips">コツ・ポイント</label>
+                <textarea id="tips" name="tips" rows="3" placeholder="HTMLタグを使用できます"><%= @recipe ? @recipe['tips'] : '' %></textarea>
+            </div>
+        </div>
+        
+        <!-- ステップ情報 -->
+        <div class="form-section">
+            <h2 class="section-title">ステップ詳細</h2>
+            <div id="steps-container">
+                <% if @steps && @steps.length > 0 %>
+                    <% @steps.each_with_index do |step, index| %>
+                        <div class="step-form" data-step="<%= index %>">
+                            <h3>ステップ <%= index + 1 %></h3>
+                            <div class="form-group">
+                                <label>タイトル</label>
+                                <input type="text" name="steps[<%= index %>][title]" value="<%= step['title'] %>">
+                            </div>
+                            <div class="form-group">
+                                <label>説明</label>
+                                <textarea name="steps[<%= index %>][description]" rows="3"><%= step['description'] %></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>画像ファイル</label>
+                                <input type="file" name="steps[<%= index %>][image_file]" accept="image/*">
+                                <% if step['image_url'] %>
+                                    <div class="current-file">
+                                        現在の画像: 
+                                        <img src="<%= step['image_url'] %>" alt="ステップ画像" class="step-image-preview">
+                                    </div>
+                                <% end %>
+                            </div>
+                            <div class="form-group">
+                                <label>動画タイムスタンプ（秒）</label>
+                                <input type="number" name="steps[<%= index %>][video_timestamp]" value="<%= step['video_timestamp'] %>" min="0">
+                            </div>
+                            <button type="button" class="remove-step-btn" onclick="removeStep(this)">ステップを削除</button>
+                        </div>
+                    <% end %>
+                <% end %>
+            </div>
+            <button type="button" id="add-step-btn" onclick="addStep()">ステップを追加</button>
+        </div>
+        
+        <!-- プレビューボタン -->
+        <div class="form-actions">
+            <button type="button" id="preview-btn" onclick="showPreview()">プレビュー</button>
+            <button type="submit" class="primary-btn"><%= @recipe ? '更新' : '作成' %></button>
+            <a href="/" class="cancel-btn">キャンセル</a>
+        </div>
+    </form>
+</div>
+
+<!-- プレビューモーダル -->
+<div id="preview-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>プレビュー</h2>
+            <button class="close-btn" onclick="closePreview()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <iframe id="preview-frame" src="" width="100%" height="600"></iframe>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.form-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-section {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #4CAF50;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.current-file {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.thumbnail-preview,
+.step-image-preview {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+}
+
+.step-form {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.step-form h3 {
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+.remove-step-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+#add-step-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.primary-btn,
+#preview-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+#preview-btn {
+    background: #2196F3;
+}
+
+.cancel-btn {
+    background: #f5f5f5;
+    color: #666;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 2% auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 1200px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-body {
+    flex: 1;
+    padding: 1rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+let stepCount = <%= @steps ? @steps.length : 0 %>;
+
+function addStep() {
+    const container = document.getElementById('steps-container');
+    const stepDiv = document.createElement('div');
+    stepDiv.className = 'step-form';
+    stepDiv.setAttribute('data-step', stepCount);
+    
+    stepDiv.innerHTML = `
+        <h3>ステップ ${stepCount + 1}</h3>
+        <div class="form-group">
+            <label>タイトル</label>
+            <input type="text" name="steps[${stepCount}][title]">
+        </div>
+        <div class="form-group">
+            <label>説明</label>
+            <textarea name="steps[${stepCount}][description]" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label>画像ファイル</label>
+            <input type="file" name="steps[${stepCount}][image_file]" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label>動画タイムスタンプ（秒）</label>
+            <input type="number" name="steps[${stepCount}][video_timestamp]" min="0">
+        </div>
+        <button type="button" class="remove-step-btn" onclick="removeStep(this)">ステップを削除</button>
+    `;
+    
+    container.appendChild(stepDiv);
+    stepCount++;
+}
+
+function removeStep(button) {
+    button.parentElement.remove();
+}
+
+function showPreview() {
+    // フォームデータを収集してプレビュー用のURLを生成
+    const formData = new FormData(document.querySelector('.recipe-form'));
+    
+    // プレビュー用のエンドポイントにPOST
+    fetch('/recipes/preview', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(html => {
+        // プレビューモーダルを表示
+        const modal = document.getElementById('preview-modal');
+        const frame = document.getElementById('preview-frame');
+        
+        // HTMLをBlobとして作成してiframeに表示
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        frame.src = url;
+        
+        modal.style.display = 'block';
+    })
+    .catch(error => {
+        console.error('プレビューエラー:', error);
+        alert('プレビューの生成に失敗しました。');
+    });
+}
+
+function closePreview() {
+    const modal = document.getElementById('preview-modal');
+    const frame = document.getElementById('preview-frame');
+    
+    modal.style.display = 'none';
+    
+    // URLを解放
+    if (frame.src.startsWith('blob:')) {
+        URL.revokeObjectURL(frame.src);
+    }
+    frame.src = '';
+}
+
+// モーダル外クリックで閉じる
+window.onclick = function(event) {
+    const modal = document.getElementById('preview-modal');
+    if (event.target === modal) {
+        closePreview();
+    }
+}
+</script>

@@ -1,38 +1,176 @@
-<div class="card">
-    <h2>📚 動画レシピ一覧</h2>
-    <p>業務効率化のための実践的な動画レシピをご覧いただけます。</p>
-</div>
-
-<div class="grid">
-    <% recipes.each do |recipe| %>
-        <div class="card">
-            <h3><%= recipe['title'] %></h3>
-            <p><%= recipe['description'] %></p>
-            
-            <div style="margin: 1rem 0;">
-                <span class="badge badge-primary"><%= recipe['industry'] %></span>
-                <span class="badge badge-success"><%= recipe['purpose'] %></span>
-                <span class="badge badge-<%= recipe['difficulty_level'] == '初級' ? 'success' : recipe['difficulty_level'] == '中級' ? 'warning' : 'danger' %>">
-                    <%= recipe['difficulty_level'] %>
-                </span>
-            </div>
-            
-            <div style="margin: 1rem 0;">
-                <small>⏱️ <%= recipe['duration_minutes'] %>分</small>
-                <small style="margin-left: 1rem;">
-                    🔓 <%= recipe['access_level'] == 'free' ? '無料' : 'プレミアム' %>
-                </small>
-            </div>
-            
-            <a href="/recipes/<%= recipe['id'] %>" class="btn">詳細を見る</a>
+<!-- ヒーローセクション -->
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">AIレシピで<br>仕事を効率化</h1>
+        <p class="hero-subtitle">ChatGPTを使った実践的なビジネススキルを学ぼう</p>
+        <div class="hero-buttons">
+            <a href="/preview/nav" class="hero-btn primary">🎯 プレビューセンター</a>
+            <a href="/admin" class="hero-btn secondary">⚙️ 管理画面</a>
         </div>
-    <% end %>
+    </div>
 </div>
 
-<% if recipes.empty? %>
-    <div class="card">
-        <h3>📝 レシピがありません</h3>
-        <p>まだレシピが登録されていません。管理画面からレシピを追加してください。</p>
-        <a href="/admin" class="btn">管理画面へ</a>
+<!-- 最新のAIレシピセクション -->
+<div class="section-container">
+    <h2 class="section-title">最新のAIレシピ</h2>
+    <div class="recipe-grid">
+        <% recipes.each_with_index do |recipe, index| %>
+            <div class="recipe-card" onclick="location.href='/recipes/<%= recipe['id'] %>'">
+                <div class="recipe-thumbnail">
+                    <img src="<%= recipe['thumbnail_url'] || '/thumbnails/default.svg' %>" alt="<%= recipe['title'] %>">
+                    <div class="play-overlay">
+                        <span class="play-icon">▶</span>
+                    </div>
+                    <div class="duration-badge">
+                        <%= recipe['duration_minutes'] %>分
+                    </div>
+                </div>
+                <div class="recipe-info">
+                    <h3 class="recipe-title"><%= recipe['title'] %></h3>
+                    <div class="recipe-meta">
+                        <span class="difficulty-badge"><%= recipe['difficulty_level'] %></span>
+                        <span class="industry-badge"><%= recipe['industry'] %></span>
+                    </div>
+                </div>
+            </div>
+        <% end %>
     </div>
-<% end %>
+</div>
+
+<!-- カテゴリー別レシピ -->
+<div class="section-container">
+    <h2 class="section-title">カテゴリー別</h2>
+    <div class="category-grid">
+        <div class="category-card" onclick="location.href='/category/beginner'">
+            <div class="category-icon">🚀</div>
+            <h3 class="category-title">初心者向け</h3>
+            <p class="category-count">12件</p>
+        </div>
+        <div class="category-card" onclick="location.href='/category/advanced'">
+            <div class="category-icon">⚡</div>
+            <h3 class="category-title">上級者向け</h3>
+            <p class="category-count">8件</p>
+        </div>
+        <div class="category-card" onclick="location.href='/category/business'">
+            <div class="category-icon">💼</div>
+            <h3 class="category-title">ビジネス</h3>
+            <p class="category-count">15件</p>
+        </div>
+        <div class="category-card" onclick="location.href='/category/creative'">
+            <div class="category-icon">🎨</div>
+            <h3 class="category-title">クリエイティブ</h3>
+            <p class="category-count">6件</p>
+        </div>
+    </div>
+</div>
+
+<!-- 人気レシピ -->
+<div class="section-container">
+    <h2 class="section-title">人気レシピ</h2>
+    <div class="popular-grid">
+        <div class="popular-card featured" onclick="location.href='/recipes/1'">
+            <div class="popular-thumbnail">
+                <img src="/thumbnails/225.jpg" alt="新人も理解が深まる！作業手順書のマンガ化">
+                <div class="play-overlay">
+                    <span class="play-icon">▶</span>
+                </div>
+                <div class="popular-badge">人気No.1</div>
+            </div>
+            <div class="popular-info">
+                <h3 class="popular-title">新人も理解が深まる！<br>作業手順書のマンガ化</h3>
+                <div class="popular-stats">
+                    <span class="views">👁 2.4k</span>
+                    <span class="likes">❤ 156</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="popular-card" onclick="location.href='/recipes/2'">
+            <div class="popular-thumbnail">
+                <img src="/thumbnails/recipe_2.svg" alt="ゲーム感覚で学べる！日本クイズGPT">
+                <div class="play-overlay">
+                    <span class="play-icon">▶</span>
+                </div>
+            </div>
+            <div class="popular-info">
+                <h3 class="popular-title">ゲーム感覚で学べる！<br>日本クイズGPT</h3>
+                <div class="popular-stats">
+                    <span class="views">👁 1.8k</span>
+                    <span class="likes">❤ 98</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="popular-card" onclick="location.href='/recipes/3'">
+            <div class="popular-thumbnail">
+                <img src="/thumbnails/recipe_3.svg" alt="店長後の10分で整う！文字こしの清書">
+                <div class="play-overlay">
+                    <span class="play-icon">▶</span>
+                </div>
+            </div>
+            <div class="popular-info">
+                <h3 class="popular-title">店長後の10分で整う！<br>文字こしの清書</h3>
+                <div class="popular-stats">
+                    <span class="views">👁 1.5k</span>
+                    <span class="likes">❤ 87</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><styl
+e>
+.hero-buttons {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.hero-btn.primary {
+    background: #4CAF50;
+    color: white;
+}
+
+.hero-btn.primary:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.hero-btn.secondary {
+    background: white;
+    color: #4CAF50;
+    border: 2px solid #4CAF50;
+}
+
+.hero-btn.secondary:hover {
+    background: #4CAF50;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+@media (max-width: 768px) {
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .hero-btn {
+        width: 200px;
+        text-align: center;
+    }
+}
+</style>

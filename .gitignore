@@ -44,3 +44,25 @@ yarn-debug.log*
 
 # Ignore application configuration
 /config/application.yml
+
+# AWS / Elastic Beanstalk
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+.aws/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 動画・画像（本番ではS3に保存）
+public/videos/*.mp4
+public/thumbnails/*.jpg
+public/thumbnails/*.png
+
+# サンプルファイルは除外しない
+!public/videos/sample.mp4
+!public/thumbnails/sample.jpg
+!public/thumbnails/sample_step.jpg

@@ -1,0 +1,250 @@
+<!-- プレビューナビゲーション -->
+<div class="preview-nav-container">
+    <h1 class="nav-title">🎯 プレビューセンター</h1>
+    <p class="nav-subtitle">各画面のプレビューを確認できます</p>
+    
+    <div class="preview-grid">
+        <!-- ホーム画面プレビュー -->
+        <div class="preview-card">
+            <div class="preview-icon">🏠</div>
+            <h3>ホーム画面</h3>
+            <p>レシピ一覧とヒーローセクションを含むメインページ</p>
+            <div class="preview-actions">
+                <a href="/preview/home" class="preview-btn primary">プレビューを見る</a>
+                <a href="/preview/home" target="_blank" class="preview-btn secondary">新しいタブで開く</a>
+            </div>
+        </div>
+        
+        <!-- レシピ詳細プレビュー -->
+        <div class="preview-card">
+            <div class="preview-icon">📄</div>
+            <h3>レシピ詳細画面</h3>
+            <p>個別レシピの詳細ページとステップ表示</p>
+            <div class="preview-actions">
+                <a href="/preview" class="preview-btn primary">プレビューを見る</a>
+                <a href="/preview" target="_blank" class="preview-btn secondary">新しいタブで開く</a>
+            </div>
+        </div>
+        
+        <!-- 管理画面プレビュー -->
+        <div class="preview-card">
+            <div class="preview-icon">⚙️</div>
+            <h3>管理画面</h3>
+            <p>レシピ管理と統計情報の表示</p>
+            <div class="preview-actions">
+                <a href="/admin" class="preview-btn primary">管理画面を見る</a>
+                <a href="/admin" target="_blank" class="preview-btn secondary">新しいタブで開く</a>
+            </div>
+        </div>
+        
+        <!-- レシピ作成フォーム -->
+        <div class="preview-card">
+            <div class="preview-icon">📝</div>
+            <h3>レシピ作成フォーム</h3>
+            <p>新しいレシピを作成するためのフォーム</p>
+            <div class="preview-actions">
+                <a href="/recipes/new" class="preview-btn primary">フォームを見る</a>
+                <a href="/recipes/new" target="_blank" class="preview-btn secondary">新しいタブで開く</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 機能説明 -->
+    <div class="feature-section">
+        <h2>🚀 主な機能</h2>
+        <div class="feature-list">
+            <div class="feature-item">
+                <h4>📱 レスポンシブデザイン</h4>
+                <p>PC、タブレット、スマートフォンに対応</p>
+            </div>
+            <div class="feature-item">
+                <h4>🎬 動画プレビュー</h4>
+                <p>レシピ動画の再生とタイムスタンプ機能</p>
+            </div>
+            <div class="feature-item">
+                <h4>📊 ステップ表示</h4>
+                <p>詳細な手順とプロンプト例の表示</p>
+            </div>
+            <div class="feature-item">
+                <h4>🔧 管理機能</h4>
+                <p>レシピの作成、編集、削除機能</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="back-section">
+        <a href="/" class="back-btn">← トップページに戻る</a>
+    </div>
+</div>
+
+<style>
+.preview-nav-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.nav-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.nav-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.preview-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.preview-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.preview-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.preview-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.preview-card p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.preview-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.preview-btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.preview-btn.primary {
+    background: #4CAF50;
+    color: white;
+}
+
+.preview-btn.primary:hover {
+    background: #45a049;
+}
+
+.preview-btn.secondary {
+    background: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.preview-btn.secondary:hover {
+    background: #e0e0e0;
+}
+
+.feature-section {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.feature-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.feature-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.feature-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.feature-item h4 {
+    color: #4CAF50;
+    margin-bottom: 0.5rem;
+}
+
+.feature-item p {
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.back-section {
+    text-align: center;
+}
+
+.back-btn {
+    display: inline-block;
+    background: #2196F3;
+    color: white;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background: #1976D2;
+}
+
+@media (max-width: 768px) {
+    .preview-nav-container {
+        padding: 1rem;
+    }
+    
+    .nav-title {
+        font-size: 2rem;
+    }
+    
+    .preview-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .feature-list {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
