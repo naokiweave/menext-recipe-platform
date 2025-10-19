@@ -1,0 +1,95 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+!AWS_DEPLOYMENT.md
+LICENSE
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*.swn
+.DS_Store
+
+# Logs
+log/*
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules
+.bundle
+vendor/bundle
+
+# Database
+*.sqlite3
+*.sqlite3-journal
+db/*.sqlite3
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+tmp/*
+*.tmp
+*.bak
+*.cache
+
+# Test files
+test
+spec
+.rspec
+coverage
+
+# AWS
+.aws
+.elasticbeanstalk/*
+
+# Docker
+docker-compose.override.yml
+Dockerfile.dev
+
+# Large media files (use S3 in production)
+public/videos/*.mp4
+public/thumbnails/*.jpg
+public/thumbnails/*.png
+
+# Keep sample files
+!public/videos/sample.mp4
+!public/thumbnails/sample.jpg
+!public/thumbnails/sample_step.jpg
+
+# Build artifacts
+public/assets
+public/packs
+public/packs-test
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Rails specific
+/storage/*
+/config/master.key
+/config/credentials.yml.enc
+/config/application.yml

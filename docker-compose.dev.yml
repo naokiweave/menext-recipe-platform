@@ -1,0 +1,29 @@
+# 開発環境用の簡易版 Docker Compose 設定
+# 使い方: docker-compose -f docker-compose.dev.yml up
+
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base  # 本番ビルドではなくベースイメージを使用
+    ports:
+      - "4567:4567"
+    volumes:
+      # コードの変更を即座に反映
+      - .:/app:cached
+      - bundle_cache:/usr/local/bundle
+    environment:
+      - RACK_ENV=development
+      - PORT=4567
+    env_file:
+      - .env
+    command: bundle exec puma -C config/puma.rb
+    stdin_open: true
+    tty: true
+
+volumes:
+  bundle_cache:
+    driver: local

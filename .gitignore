@@ -66,3 +66,7 @@ public/thumbnails/*.png
 !public/videos/sample.mp4
 !public/thumbnails/sample.jpg
 !public/thumbnails/sample_step.jpg
+
+# Docker
+docker-compose.override.yml
+.docker/

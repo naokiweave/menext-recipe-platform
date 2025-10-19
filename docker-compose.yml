@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+  # Webアプリケーション
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "4567:4567"
+    volumes:
+      # アプリケーションコード（開発時のみ）
+      - .:/app
+      # 動画とサムネイル（永続化）
+      - videos_data:/app/public/videos
+      - thumbnails_data:/app/public/thumbnails
+      # ログ（永続化）
+      - logs_data:/app/log
+      # Bundlerキャッシュ（高速化）
+      - bundle_cache:/usr/local/bundle
+    environment:
+      - RACK_ENV=development
+      - PORT=4567
+      - AWS_REGION=${AWS_REGION:-ap-northeast-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET}
+      - AWS_CLOUDFRONT_DOMAIN=${AWS_CLOUDFRONT_DOMAIN}
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - minext_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4567/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL データベース（本番用）
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=minext
+      - POSTGRES_PASSWORD=minext_password
+      - POSTGRES_DB=minext_production
+    networks:
+      - minext_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U minext"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis（セッション・キャッシュ用、オプション）
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - minext_network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Nginx（リバースプロキシ、オプション）
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - videos_data:/app/public/videos:ro
+      - thumbnails_data:/app/public/thumbnails:ro
+    depends_on:
+      - web
+    networks:
+      - minext_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  videos_data:
+    driver: local
+  thumbnails_data:
+    driver: local
+  logs_data:
+    driver: local
+  bundle_cache:
+    driver: local
+
+networks:
+  minext_network:
+    driver: bridge
