@@ -253,6 +253,12 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.2.0)
       tilt (~> 2.0)
+    sinatra-contrib (3.2.0)
+      multi_json (>= 0.0.2)
+      mustermann (~> 3.0)
+      rack-protection (= 3.2.0)
+      sinatra (= 3.2.0)
+      tilt (~> 2.0)
     spring (4.4.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -294,6 +300,7 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk-cloudfront (~> 1.0)
   aws-sdk-s3 (~> 1.0)
+  bcrypt (~> 3.1)
   bootsnap (>= 1.4.4)
   byebug
   devise
@@ -309,6 +316,7 @@ DEPENDENCIES
   sassc-rails
   sidekiq
   sinatra
+  sinatra-contrib
   spring
   sqlite3 (>= 2.1)
   stimulus-rails

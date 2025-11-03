@@ -13,10 +13,12 @@
 
 ## 技術スタック
 
-- **バックエンド**: Ruby (Sinatra)
+- **バックエンド**: Ruby 3.3.6 (Sinatra 3.2.0)
 - **データベース**: SQLite3
+- **認証**: BCrypt (セッションベース)
 - **フロントエンド**: HTML/CSS/JavaScript (ERB)
-- **デプロイ**: Heroku/Railway対応
+- **Webサーバー**: Puma
+- **デプロイ**: Railway/Docker対応
 
 ## ローカル開発
 
@@ -25,16 +27,43 @@
 bundle install
 
 # サーバー起動
-ruby simple_server.rb
+ruby server.rb
 
 # アクセス
 open http://localhost:4567
 ```
 
+サーバーが起動すると以下のURLでアクセスできます:
+- **トップページ**: http://localhost:4567
+- **ログイン**: http://localhost:4567/login
+- **サインアップ**: http://localhost:4567/signup
+- **管理画面**: http://localhost:4567/admin
+- **API**: http://localhost:4567/api/recipes
+
 ## API エンドポイント
 
-- `GET /api/recipes` - レシピ一覧
+### 認証
+- `POST /api/auth/signup` - ユーザー登録
+- `POST /api/auth/login` - ログイン
+- `POST /api/auth/logout` - ログアウト
+- `GET /api/auth/me` - 現在のユーザー情報取得
+
+### レシピ
+- `GET /api/recipes` - レシピ一覧（検索・フィルタリング機能付き）
 - `GET /api/recipes/:id` - レシピ詳細
+- `GET /api/recipes/popular` - 人気レシピ一覧
+
+### ユーザーアクション
+- `POST /api/recipes/:id/save` - レシピを保存
+- `DELETE /api/recipes/:id/save` - レシピの保存を解除
+- `POST /api/recipes/:id/rate` - レシピを評価
+- `POST /api/recipes/:id/view` - 視聴記録を保存
+
+### タグ
+- `GET /api/tags` - タグ一覧
+- `GET /api/tags/:id/recipes` - タグ別レシピ一覧
+
+詳細なAPI仕様は [docs/BACKEND_API.md](docs/BACKEND_API.md) を参照してください。
 
 ## デプロイ
 

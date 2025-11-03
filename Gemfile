@@ -34,7 +34,9 @@ gem 'sidekiq'
 
 # Simple web server
 gem 'sinatra'
+gem 'sinatra-contrib'
 gem 'sqlite3', '>= 2.1'
+gem 'bcrypt', '~> 3.1'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
